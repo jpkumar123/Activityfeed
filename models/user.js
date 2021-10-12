@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       isEmail: true,
     },
     },
+    resetPasswordToken:  {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     password: DataTypes.STRING,
     mobileno: DataTypes.INTEGER,
     role_id: DataTypes.INTEGER,
@@ -35,6 +39,14 @@ module.exports = (sequelize, DataTypes) => {
     User.belongsTo(models.Roles, {
       foreignKey: "role_id",
       as: "Role",
+    });
+    User.hasMany(models.Like, {
+      foreignKey: "user_id",
+      as: "Like",
+    });
+    User.hasMany(models.Comment, {
+      foreignKey: "user_id",
+      as: "Comment",
     });
   };
 
