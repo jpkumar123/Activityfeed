@@ -6,6 +6,8 @@ const { Roles } = require('../models/index');
 const Router = require('express').Router();
 const bcrypt = require('bcrypt');
 const user = require('../models/user');
+const {sgMail} = require('@sendgrid/mail');
+require('dotenv').config();
 
 const authcontroller = require("../controllers/authcontroller.js");
 const usercontroller = require("../controllers/usercontroller.js")
@@ -25,5 +27,8 @@ Router.get("/userslist", isAuthorized,isAdmin, authcontroller.getalluserslist);
 
 
 Router.get("/userpostslist", isAuthorized,isAdmin, authcontroller.getallpostslist);
+
+Router.post("/forgotpassword", usercontroller.postforgotPassword);
+Router.post("/resetpassword", usercontroller.postresetPassword);
 
 module.exports = Router;
