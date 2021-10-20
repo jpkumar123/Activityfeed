@@ -12,10 +12,9 @@ exports.signup =(req, res) => {
         Username: req.body.Username,
         password: req.body.password,
         mobileno: req.body.mobileno,
-        Roles:  User.Role  
-        
-    }
-    userData.role_id = 2;
+        role_id: 1   
+    };
+
     User.findOne({
         where: {
             email: req.body.email
@@ -27,7 +26,7 @@ exports.signup =(req, res) => {
                 userData.password = hash
                 User.create(userData)
                     .then(user => {
-                        res.json( {Username: req.body.Username, status: user.email + 'REGISTEREDSUCCESSFULLY' })
+                        res.json( {Username: req.body.Username, status: user.email + 'REGISTERED SUCCESSFULLY' })
                     })
                 
                     .catch(err => {
