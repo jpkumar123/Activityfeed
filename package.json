@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:create": "sequelize db:create",
+    "db:migrate": "sequelize db:migrate",
+    "db:seed": "sequelize db:seed:all"
   },
   "author": "\"prasanth\"",
   "license": "ISC",
@@ -13,15 +16,21 @@
     "@sendgrid/mail": "^7.4.7",
     "async": "^3.2.1",
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
     "bytes": "^3.1.0",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.3",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",
     "random": "^3.0.6",
-    "sequelize": "^6.6.5"
+    "sanitize": "^2.1.0",
+    "sequelize": "^6.6.5",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "eslint": "^7.32.0"

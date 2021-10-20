@@ -21,13 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Like',
   });
   Like.associate = (models) =>{
-    Like.belongsTo(models.User, {
-        foreignKey:"user_id",
-        as: "user"
-    });
+    // Like.belongsTo(models.User, {
+    //     foreignKey:"user_id",
+    //     as: "user"
+    // });
     Like.belongsTo(models.Post, {
-      foreignKey:"postid",
-      as: "post"
+      foreignKey:"postid"
     });
 };
   

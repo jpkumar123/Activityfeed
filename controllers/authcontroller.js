@@ -5,20 +5,25 @@ const bcrypt = require('bcrypt');
 const { compareContent, hashContent } = require('../utils/hash');
 const { getToken } = require('../utils/jwt');
 const {Post}= require('../models/index');
-
+const models = require("../models/index");
+const { Like } = require("../models/index");
+const { body, validationResult } = require('express-validator');
+const {validation} = require('../middlewares/validation.js')
+const Sequelize = require('sequelize');
 exports.signup =(req, res) => {
     const userData = {
         email: req.body.email,
         Username: req.body.Username,
         password: req.body.password,
         mobileno: req.body.mobileno,
-        role_id: 1   
+        role_id: 2
     };
 
     User.findOne({
         where: {
             email: req.body.email
-        }
+        },
+        
     })
         .then(user => {
             if (!user) {
@@ -26,7 +31,7 @@ exports.signup =(req, res) => {
                 userData.password = hash
                 User.create(userData)
                     .then(user => {
-                        res.json( {Username: req.body.Username, status: user.email + 'REGISTERED SUCCESSFULLY' })
+                        res.json( {Username: req.body.Username, status:   'User Registered successfully.' })
                     })
                 
                     .catch(err => {
@@ -34,84 +39,61 @@ exports.signup =(req, res) => {
                     })
                 })
             } else {
-                res.json({ error: "USER ALREADY EXISTS" })
+                res.status(400).end( "Email already exist!" )
+                
             }
         })
         .catch(err => {
             res.send('ERROR: ' + err)
         })
 }
-
-
-
 //user can login
-
 exports.login =async (req, res)=>{
     try{
         const { email, password } = req.body;
-    
         const user = await User.findOne({
-            where: {email},
-                 
+            where: {email}, 
              include: [
-                
                 {
-                    
                   model: Roles,
-                  as: "Role",
-                  
-                  
-                }, 
-               
+                  as: "Role", 
+                },  
               ],
-              
         });
-     
-        if(user == null) throw new Error("email is not found");
-
+        if(user == null) throw new Error("Email is not found");
         const doesPasswordMatch = await compareContent(password, user.password);
-
-        if(doesPasswordMatch == false) throw new Error("password doesn't match");
-
-
+        if(doesPasswordMatch == false) throw new Error("Invalid Credentials");
         const jwtData = {
             id: user.id,
-            email: user.email
+            email: user.email,
         };
-
         const token = getToken(jwtData);
-
         user.password = undefined;
         res.send({
             user: user,
-            token: token
+            token: token,
         });
-
-
-
     }catch(err){
         return res.status(400).send({
-            error: err.message
+            Error: err.message
         })
     }
-
 }
 
 
-//user can get users list with id
-
-exports.getuserslist=async (req, res) => {
+//user can get posts list with id
+exports.getpostslist=async (req, res) => {
     try{
-        const userId = req.params.userId;
+        const user_id = req.body;
 
-        const user = await User.findOne({
+        const posts = await User.findOne({
             where: {
-                id: userId
+                id: user_id
             }
         });
     
         return res.send({
-            user: user
+            posts: posts
         });
 
     }catch(err){
@@ -147,12 +129,30 @@ exports.getalluserslist=async (req, res) => {
 exports.getallpostslist=async (req, res) => {
     try{
         
-        const posts = await Post.findAll();
-        res.send({
-            count : posts.length,
-            posts: posts
-
+        let posts = await Post.findAll({ 
+            include:[{
+                model: models.Comment,
+                as: "Comments"
+            },{
+                model: models.Like,
+                as: "Like",
+            },
+           ],
         });
+
+        posts = posts.map(_post=> {
+            const obj = _post.get({ plain: true });
+            obj.likesCount = obj.Like.length;
+            return obj;
+        });
+
+
+        res.send(
+            {
+            count : posts.length,
+            posts: posts,
+           }
+        );
     
         
 

@@ -1,14 +1,20 @@
 const { decodeToken } = require("../utils/jwt");
 const { User } = require("../models/index");
-const isAuthorized = (req, res, next) => {
+const isAuthorized = async (req, res, next) => {
     try{
         const token = req.headers.authorization;
-        const user = decodeToken(token);
-
+        const decodeToken1 = decodeToken(token);
+        console.log(decodeToken1,"token");
+        const user = await User.findOne({ id: decodeToken.id });
+        
+        if(!user){
+            throw new Error("invalid user");
+        }
         req.user = user;
         next();
 
     }catch(error){
+        console.log(error)
         res.status(401).end("Invaliduser");
     }
 }
