@@ -6,12 +6,14 @@ const { Roles } = require("../models/index");
 const Router = require("express").Router();
 const bcrypt = require("bcrypt");
 const user = require("../models/user");
-const { check,sanitizeBody } = require('express-validator');
-const {validation} = require('../middlewares/validation.js')
+const { check, body } = require('express-validator/check');
 
+const bodyParser = require('body-parser')
+const urlencodedParser = bodyParser.urlencoded({extended:false})
 
 const authcontroller = require("../controllers/authcontroller.js");
 const usercontroller = require("../controllers/usercontroller.js");
+const { registerValidator } = require('../utils/validators');
 
 /**
  * @swagger
@@ -54,7 +56,9 @@ const usercontroller = require("../controllers/usercontroller.js");
  *          description: Success response
  */
 
-Router.post("/signup",validation, authcontroller.signup);
+Router.post("/signup",
+        registerValidator
+    ,authcontroller.signup);
 
 /**
  * @swagger

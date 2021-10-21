@@ -7,8 +7,11 @@ const { getToken } = require('../utils/jwt');
 const {Post}= require('../models/index');
 const models = require("../models/index");
 const { Like } = require("../models/index");
-const { body, validationResult } = require('express-validator');
-const {validation} = require('../middlewares/validation.js')
+const { check, body } = require("express-validator");
+const { registerValidator } = require('../utils/validators');
+const { validationResult } = require("express-validator");
+
+// const User = require('../models/user');
 const Sequelize = require('sequelize');
 exports.signup =(req, res) => {
     const userData = {
@@ -18,6 +21,16 @@ exports.signup =(req, res) => {
         mobileno: req.body.mobileno,
         role_id: 2
     };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(400).json( {
+       
+        ErrorMessage: errors.array()[0].msg,
+       
+        // validationErrors: errors.array()
+      });
+    }
 
     User.findOne({
         where: {

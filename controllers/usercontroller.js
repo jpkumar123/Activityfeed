@@ -8,7 +8,7 @@ const { Like } = require("../models/index");
 const models = require("../models/index");
 const Sequelize = require('sequelize');
 const bcrypt = require("bcrypt");
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
 
 require("dotenv").config();
 //user can create post
@@ -321,10 +321,10 @@ exports.getpage = async (req, res) => {
     });
 };
 
-exports.postimages = async(req,res) => {
-  upload.array('files'), 
-  res.json({status: 'ok', message: 'Pictures uploaded'});
-}
+// exports.postimages = async(req,res) => {
+//   upload.array('files'), 
+//   res.json({status: 'ok', message: 'Pictures uploaded'});
+// }
 
 
 

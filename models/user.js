@@ -21,20 +21,13 @@ module.exports = (sequelize, DataTypes) => {
     validate: {
       isEmail: true,
     },
-    },
-    password: {
-      type: DataTypes.STRING,
+    }, password: {type:DataTypes.STRING,
       allowNull: false,
-      validate: {
-         len: { 
-            args: [7, 100],
-            msg: "The password length should be between 7 and 42 characters."
-         },
-     
         
-
-      }
-   },
+  
+   
+  
+    },
 
     mobileno: DataTypes.INTEGER,
     role_id: DataTypes.INTEGER,
