@@ -51,40 +51,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(Router);
 
-// api.post('/secure', function(req, res) {
-//   const token = jwt.sign({ user: { id: 1, name: 'ME!', role: 'average' } }, 'dsfklgj');
-//   console.log(token);
-//   res.json({ jwt: token });
-// ;
-
-// api.post('/check/post', function(req, res) {
-//   const token = req.body.jwt;
-//   console.log('token: ' + token);
-//   const x = jwt.verify(token, 'dsfklgj', function(err, decoded) {
-//       if (err) throw err;
-//       console.log(decoded);
-//   });
-//   console.log(x);
-//   if (x != true) {
-//       res.json({ auth: false });
-//   } else {
-//       res.json({ auth: true });
-//   }
-// });
-// swaggerDocument = require('./swagger.json');
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerAPIPath = process.env.SWAGGER_APIPATH || '/';
-// app.get(
-//   '/api-docs',
-//   swaggerUi.serve,
-//   swaggerUi.setup(swaggerDocument)
-// );
-// api.set('port',8000);
-// var server = http.createServer(api);
-// server.listen(api.get('port'), function() {
-//     console.log("Express server listening on port " + api.get('port'));
-// });
-
 app.listen(3000, () => {
   console.log(`server running at port:3000`);
 });

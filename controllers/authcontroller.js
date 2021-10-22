@@ -99,9 +99,9 @@ exports.getpostslist=async (req, res) => {
     try{
         const user_id = req.body;
 
-        const posts = await User.findOne({
+        const posts = await Post.findAll({
             where: {
-                id: user_id
+                authorId: user_id
             }
         });
     
