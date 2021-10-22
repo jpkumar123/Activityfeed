@@ -6,7 +6,7 @@ const { Roles } = require("../models/index");
 const Router = require("express").Router();
 const bcrypt = require("bcrypt");
 const user = require("../models/user");
-const { check, body } = require('express-validator/check');
+const { check, body } = require("express-validator");
 
 const bodyParser = require('body-parser')
 const urlencodedParser = bodyParser.urlencoded({extended:false})
@@ -17,8 +17,6 @@ const { registerValidator } = require('../utils/validators');
 
 /**
  * @swagger
- *
- * /register:
  *   post:
  *     description: User registration
  *     produces:
@@ -174,6 +172,7 @@ Router.get("/allpostslist", isAuthorized, authcontroller.getallpostslist);
  *          description: Success response
  */
 Router.get("/page/:page", usercontroller.getpage);
+
 
 
 

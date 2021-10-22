@@ -6,9 +6,12 @@ const { sendEmail } = require("../utils/email");
 const { Comment } = require("../models/index");
 const { Like } = require("../models/index");
 const models = require("../models/index");
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
+const { writeFile } = require("fs/promises");
+const path = require("path");
+const { Buffer } = require("buffer");
 
 require("dotenv").config();
 //user can create post
@@ -306,14 +309,14 @@ exports.getpage = async (req, res) => {
         offset: offset,
         $sort: { id: 1 },
       })
-      .then((list) => {
-       
-        res
-          .status(200)
-          .json({ result: list, count: data.count, pages: pages });
-      }).catch(err=>{
-        throw err;
-      });
+        .then((list) => {
+          res
+            .status(200)
+            .json({ result: list, count: data.count, pages: pages });
+        })
+        .catch((err) => {
+          throw err;
+        });
     })
     .catch(function (error) {
       console.log("error", error);
@@ -321,14 +324,28 @@ exports.getpage = async (req, res) => {
     });
 };
 
-// exports.postimages = async(req,res) => {
-//   upload.array('files'), 
-//   res.json({status: 'ok', message: 'Pictures uploaded'});
-// }
+exports.fileupload = async (req, res) => {
+  try {
+    for await (file of req.files) {
+  
+      const extention = file.originalname.split(".").pop();
+      const fileNameToSaveAs = `${Date.now()}.${extention}`;
 
+      console.log(fileNameToSaveAs);
+      const destinationPath = path.join(
+        __dirname,
+        "..",
+        "uploads/",
+        fileNameToSaveAs
+      );
+      await writeFile(destinationPath, file.buffer, { flag: "wx+" });
+    }
 
-
-
-
+    return res.send(`File has been uploaded.`);
+  } catch (error) {
+    console.log(error);
+    return res.send(`Error when trying upload images: ${error}`);
+  }
+};
 
 

@@ -1,6 +1,6 @@
 const { isAuthorized,isAdmin } = require('../middlewares');
 const { Post }= require('../models/index');
-
+const multer  = require('multer')
 const Router = require('express').Router();
 const usercontroller = require("../controllers/usercontroller.js");
 
@@ -247,4 +247,11 @@ Router.delete("/unlike/:likeId",isAuthorized,usercontroller.unlike)
  *          description: Success response
  */
 Router.put("/updateanypost/:postId", isAuthorized,isAdmin,usercontroller.updateanypost)
+
+const uploadService = multer();
+
+Router.post("/upload", uploadService.array('photos', 10),usercontroller.fileupload)
+
+
 module.exports = Router;
+
